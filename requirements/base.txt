@@ -1,0 +1,8 @@
+Django==3.2
+djangorestframework==3.12.4
+django-filter==2.4.0
+django-configurations==2.2
+cryptography==3.4.7
+djangorestframework-jwt==1.11.0
+django-cors-headers==3.7.0
+drf-flex-fields==0.8.9
