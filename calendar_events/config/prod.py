@@ -10,7 +10,7 @@ from .common import Common
 class Prod(Common):
     DEBUG = True
     DOMAIN = "ec2-18-223-15-184.us-east-2.compute.amazonaws.com"
-#    Common.ALLOWED_HOSTS += ["18.223.15.184", "ec2-18-223-15-184.us-east-2.compute.amazonaws.com", "ec2-3-19-221-117.us-east-2.compute.amazonaws.com", "https://script.google.com"]
+    #    Common.ALLOWED_HOSTS += ["18.223.15.184", "ec2-18-223-15-184.us-east-2.compute.amazonaws.com", "ec2-3-19-221-117.us-east-2.compute.amazonaws.com", "https://script.google.com"]
     PROTOCOL = "http"
     CORS_ALLOW_HEADERS = (
         "accept",
@@ -33,6 +33,8 @@ class Prod(Common):
     SECURE_SSL_REDIRECT = False
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", PROTOCOL)
     CSRF_TRUSTED_ORIGINS = [DOMAIN]
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_BACKEND = "django_ses.SESBackend"
     DEFAULT_FROM_EMAIL = "Test <noreply@gmail.com>"
     CORS_ALLOW_ALL_ORIGINS = True
+    AWS_ACCESS_KEY_ID = get_secret("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = get_secret("AWS_SECRET_ACCESS_KEY")
