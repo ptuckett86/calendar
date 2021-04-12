@@ -15,10 +15,10 @@ class CalendarEvent(MetaModel):
     )
     name = models.CharField(max_length=60)
     event_type = models.CharField(max_length=30, choices=CAL_EVENT_CHOICES)
-    dt_start = models.DateField(
+    dt_start = models.DateTimeField(
         help_text="Will store as UTC, set TZ on front end and process to UTC."
     )
-    dt_end = models.DateField()
+    dt_end = models.DateTimeField()
     description = models.CharField(max_length=250, null=True)
     location = models.CharField(max_length=100, null=True)
     sequence = models.PositiveIntegerField(default=0)
