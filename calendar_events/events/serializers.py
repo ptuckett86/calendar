@@ -62,7 +62,6 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
     attendees = serializers.PrimaryKeyRelatedField(
         queryset=AuthUser.objects.all(), many=True
     )
-    add_user = AuthUserCreateSerializer()
 
     class Meta:
         model = CalendarEvent
@@ -81,7 +80,6 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
             "transparent",
             "add_user",
         ]
-        read_only_fields = ["owner"]
 
     expandable_fields = {
         "owner": ("calendar_events.core.AuthUserSerializer", {"source": "owner"}),
@@ -101,19 +99,11 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
 
     @transaction.atomic()
     def create(self, validated_data):
-        add_user = validated_data.pop("add_user")
-        check_user = AuthUser.objects.filter(email=add_user["email"])
-        if not check_user.exists():
-            owner = AuthUser.objects.create(
-                first_name=add_user["first_name"],
-                last_name=add_user["last_name"],
-                email=add_user["email"],
-            )
-            owner.set_unusable_password()
-        else:
-            owner = self.context["request"].user
-        validated_data["owner"] = owner
+        user = self.context["request"].user
+        if not user.is_anonymous:
+            validated_data["owner"] = user
         attendees = validated_data.pop("attendees")
+        attendees.append(owner)
         instance = super().create(validated_data)
         if attendees:
             # sets the many to many fields, because we use safe delete
