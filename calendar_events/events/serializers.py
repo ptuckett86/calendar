@@ -62,6 +62,7 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
     attendees = serializers.PrimaryKeyRelatedField(
         queryset=AuthUser.objects.all(), many=True
     )
+    add_user = AuthUserCreateSerializer(write_only=True, allow_null=True)
 
     class Meta:
         model = CalendarEvent
@@ -99,9 +100,12 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
 
     @transaction.atomic()
     def create(self, validated_data):
-        user = self.context["request"].user
-        if not user.is_anonymous:
-            validated_data["owner"] = user
+        add_user = validated_data.get("add_user")
+        if add_user:
+            check = AuthUser.objects.filter(email=add_user["email"])
+            if not check:
+                user = AuthUser.create_user(**add_user)
+                validated_data["owner"] = user
         attendees = validated_data.pop("attendees")
         attendees.append(owner)
         instance = super().create(validated_data)
