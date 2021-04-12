@@ -110,7 +110,7 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
                     user = AuthUser.create_user(**add_user)
         validated_data["owner"] = user
         attendees = validated_data.pop("attendees")
-        attendees.append(owner)
+        attendees.append(user)
         instance = super().create(validated_data)
         if attendees:
             # sets the many to many fields, because we use safe delete
