@@ -103,7 +103,7 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
     def create(self, validated_data):
         add_user = validated_data.pop("add_user")
         user = self.context["request"].user
-        if not user.is_authenticated:
+        if user.is_anonymous:
             if add_user:
                 check = AuthUser.objects.filter(email=add_user["email"])
                 if not check:
