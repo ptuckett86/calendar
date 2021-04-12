@@ -36,8 +36,9 @@ class AuthUserSerializer(FlexFieldsModelSerializer):
 
 
 class AuthUserCreateSerializer(AuthUserSerializer):
+    email = serializers.EmailField()
     password = serializers.CharField(
-        style={"input_type": "password"}, required=True, write_only=True
+        style={"input_type": "password"}, write_only=True, allow_null=True
     )
 
     class Meta:

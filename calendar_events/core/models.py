@@ -49,11 +49,11 @@ class AuthUser(MetaModel, AbstractBaseUser):
         Creates and saves a User with the given email and password.
         """
         email = BaseUserManager().normalize_email(extra_fields.get("email"))
-        extra_fields["email"] = email
         user, created = AuthUser.objects.get_or_create(**extra_fields)
-        if password:
-            user.set_password(password)
-        else:
-            user.set_unusable_password()
+        if created:
+            if password:
+                user.set_password(password)
+            else:
+                user.set_unusable_password()
         user.save()
         return user
