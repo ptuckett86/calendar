@@ -102,19 +102,18 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
     @transaction.atomic()
     def create(self, validated_data):
         add_user = validated_data.pop("add_user")
-        user = self.context["request"].user
-        if user.is_anonymous:
-            if add_user:
-                check = AuthUser.objects.filter(email=add_user["email"])
-                if not check:
-                    user = AuthUser.create_user(**add_user)
+        check = AuthUser.objects.filter(email=add_user["email"])
+        if not check:
+            user = AuthUser.create_user(**add_user)
+        else:
+            user = AuthUser.objects.get(email=add_user["email"])
         validated_data["owner"] = user
         attendees = validated_data.pop("attendees")
-        attendees.append(user)
         instance = super().create(validated_data)
+        attendees.append(user)
         if attendees:
-            # sets the many to many fields, because we use safe delete
-            instance.attendees.set(attendees)
+            for attendee in attendees:
+                Attendees.objects.create(event=instance, attendee=attendee)
         return instance
 
     def update(self, instance, validated_data):
@@ -123,6 +122,6 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
         except:
             attendees = None
         if attendees:
-            # sets the many to many fields, because we use safe delete
-            instance.attendees.set(attendees)
+            for attendee in attendees:
+                Attendees.objects.create(event=instance, attendee=attendee)
         return super().update(instance, validated_data)
