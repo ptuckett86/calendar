@@ -114,7 +114,16 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
         if attendees:
             for attendee in attendees:
                 Attendees.objects.create(event=instance, attendee=attendee)
-        send_mail("New {} request".format(validated_data["event_type"]}, "{} {} has added a new {} calendar event request", "utchwprogram@gmail.com", validated_data["email"])
+        send_mail(
+            "New {} request".format(validated_data["event_type"]),
+            "{} {} has added a new {} calendar event request".format(
+                validated_data["first_name"],
+                validated_data["last_name"],
+                validated_data["event_type"],
+            ),
+            "utchwprogram@gmail.com",
+            validated_data["email"],
+        )
         return instance
 
     def update(self, instance, validated_data):
