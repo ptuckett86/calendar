@@ -117,12 +117,12 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
         send_mail(
             "New {} request".format(validated_data["event_type"]),
             "{} {} has added a new {} calendar event request".format(
-                validated_data["first_name"],
-                validated_data["last_name"],
+                add_user["first_name"],
+                add_user["last_name"],
                 validated_data["event_type"],
             ),
             "utchwprogram@gmail.com",
-            validated_data["email"],
+            add_user["email"],
         )
         return instance
 
