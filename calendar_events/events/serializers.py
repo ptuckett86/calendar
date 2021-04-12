@@ -81,6 +81,7 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
             "transparent",
             "add_user",
         ]
+        read_only_fields = ["owner"]
 
     expandable_fields = {
         "owner": ("calendar_events.core.AuthUserSerializer", {"source": "owner"}),
@@ -101,11 +102,13 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
     @transaction.atomic()
     def create(self, validated_data):
         add_user = validated_data.pop("add_user")
-        if add_user:
-            check = AuthUser.objects.filter(email=add_user["email"])
-            if not check:
-                user = AuthUser.create_user(**add_user)
-                validated_data["owner"] = user
+        user = self.context["request"].user
+        if not user.is_authenticated:
+            if add_user:
+                check = AuthUser.objects.filter(email=add_user["email"])
+                if not check:
+                    user = AuthUser.create_user(**add_user)
+        validated_data["owner"] = user
         attendees = validated_data.pop("attendees")
         attendees.append(owner)
         instance = super().create(validated_data)
