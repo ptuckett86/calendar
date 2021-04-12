@@ -41,6 +41,9 @@ class Common(Configuration):
     USE_L10N = True
     USE_TZ = True
     AUTH_USER_MODEL = "core.AuthUser"
+    # SECURITY WARNING: don't run with debug turned on in production!
+
+    # Application definition
 
     INSTALLED_APPS = [
         "django.contrib.admin",
@@ -57,10 +60,10 @@ class Common(Configuration):
     ]
 
     MIDDLEWARE = [
-        "corsheaders.middleware.CorsMiddleware",
-        "corsheaders.middleware.CorsPostCsrfMiddleware",
+        #"corsheaders.middleware.CorsPostCsrfMiddleware",
         "django.middleware.security.SecurityMiddleware",
         "django.contrib.sessions.middleware.SessionMiddleware",
+        "corsheaders.middleware.CorsMiddleware",
         "django.middleware.common.CommonMiddleware",
         "django.middleware.csrf.CsrfViewMiddleware",
         "django.contrib.auth.middleware.AuthenticationMiddleware",

@@ -8,9 +8,9 @@ from .common import Common
 
 
 class Prod(Common):
-    DEBUG = False
-    DOMAIN = "ec2-18-224-181-51.us-east-2.compute.amazonaws.com"
-    Common.ALLOWED_HOSTS += ["ec2-18-224-181-51.us-east-2.compute.amazonaws.com"]
+    DEBUG = True
+    DOMAIN = "ec2-18-223-15-184.us-east-2.compute.amazonaws.com"
+#    Common.ALLOWED_HOSTS += ["18.223.15.184", "ec2-18-223-15-184.us-east-2.compute.amazonaws.com", "ec2-3-19-221-117.us-east-2.compute.amazonaws.com", "https://script.google.com"]
     PROTOCOL = "http"
     CORS_ALLOW_HEADERS = (
         "accept",
@@ -26,11 +26,11 @@ class Prod(Common):
     )
     CORS_ALLOW_CREDENTIALS = True
     SECURE_HSTS_SECONDS = 60
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_SSL_REDIRECT = True
+    SECURE_CONTENT_TYPE_NOSNIFF = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SECURE_BROWSER_XSS_FILTER = False
+    SECURE_SSL_REDIRECT = False
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", PROTOCOL)
     CSRF_TRUSTED_ORIGINS = [DOMAIN]
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
