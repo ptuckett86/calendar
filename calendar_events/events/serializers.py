@@ -6,6 +6,7 @@ from rest_flex_fields import FlexFieldsModelSerializer
 from ..core.models import AuthUser
 from .models import CalendarEvent, Attendees
 from .fields import CAL_CHOICES
+from ..core.serializers import AuthUserCreateSerializer
 
 
 class AttendeeReadSerializer(FlexFieldsModelSerializer):
@@ -61,6 +62,7 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
     attendees = serializers.PrimaryKeyRelatedField(
         queryset=AuthUser.objects.all(), many=True
     )
+    add_user = AuthUserCreateSerializer()
 
     class Meta:
         model = CalendarEvent
@@ -77,6 +79,7 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
             "location",
             "notes",
             "transparent",
+            "add_user",
         ]
         read_only_fields = ["owner"]
 
@@ -98,7 +101,17 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
 
     @transaction.atomic()
     def create(self, validated_data):
-        owner = self.context["request"].user
+        add_user = validated_data.pop("add_user")
+        check_user = AuthUser.objects.filter(email=add_user["email"])
+        if not check_user.exists():
+            owner = AuthUser.objects.create(
+                first_name=add_user["first_name"],
+                last_name=add_user["last_name"],
+                email=add_user["email"],
+            )
+            owner.set_unusable_password()
+        else:
+            owner = self.context["request"].user
         validated_data["owner"] = owner
         attendees = validated_data.pop("attendees")
         instance = super().create(validated_data)
