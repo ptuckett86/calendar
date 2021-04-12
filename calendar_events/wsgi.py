@@ -9,12 +9,14 @@ https://docs.djangoproject.com/en/3.2/howto/deployment/wsgi/
 
 import os
 
-from django.core.wsgi import get_wsgi_application
+# from django.core.wsgi import get_wsgi_application
 from manage import get_secret
 
 env = get_secret("ENVIRONMENT").capitalize()
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "calendar_events.config")
 os.environ.setdefault("DJANGO_CONFIGURATION", env)
+
+from configurations.wsgi import get_wsgi_application
 
 application = get_wsgi_application()
