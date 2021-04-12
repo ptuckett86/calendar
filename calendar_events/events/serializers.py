@@ -1,5 +1,5 @@
 from django.db import transaction
-
+from django.core.mail import send_mail
 from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
 
@@ -114,6 +114,7 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
         if attendees:
             for attendee in attendees:
                 Attendees.objects.create(event=instance, attendee=attendee)
+        send_mail("New {} request".format(validated_data["event_type"]}, "{} {} has added a new {} calendar event request", "utchwprogram@gmail.com", validated_data["email"])
         return instance
 
     def update(self, instance, validated_data):
