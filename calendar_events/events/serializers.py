@@ -40,7 +40,7 @@ class CalendarEventChangeSerializer(FlexFieldsModelSerializer):
             "dt_end",
             "description",
             "location",
-            "summary",
+            "notes",
             "new_status",
         ]
         read_only_fields = [
@@ -53,7 +53,7 @@ class CalendarEventChangeSerializer(FlexFieldsModelSerializer):
             "dt_end",
             "description",
             "location",
-            "summary",
+            "notes",
         ]
 
 
@@ -75,7 +75,7 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
             "dt_end",
             "description",
             "location",
-            "summary",
+            "notes",
             "transparent",
         ]
         read_only_fields = ["owner"]

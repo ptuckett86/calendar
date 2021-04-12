@@ -22,5 +22,5 @@ class EventFilter(django_filters.FilterSet):
             "dt_end": ["lte"],
             "description": ["icontains"],
             "location": ["icontains"],
-            "summary": ["icontains"],
+            "notes": ["icontains"],
         }

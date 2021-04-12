@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.response import Response
 
 from .serializers import *
@@ -44,7 +44,7 @@ class CalendarEventViewSet(viewsets.ModelViewSet):
         return CalendarEventSerializer
 
     def get_permissions(self):
-        return [IsAuthenticated()]
+        return [AllowAny()]
 
     @action(methods=["get", "post"], detail=True)
     def change_status(self, request, pk=None):
