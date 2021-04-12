@@ -14,17 +14,17 @@ class CalendarEvent(MetaModel):
         "core.AuthUser", related_name="events", through="events.Attendees"
     )
     name = models.CharField(max_length=60)
-    event_type = models.CharField(max_length=30, choices=CAL_EVENT_CHOICES)
+    event_type = models.CharField(max_length=30)
     dt_start = models.DateTimeField(
         help_text="Will store as UTC, set TZ on front end and process to UTC."
     )
     dt_end = models.DateTimeField()
-    description = models.CharField(max_length=250, null=True)
+    description = models.CharField(max_length=250, null=True, blank=True)
     location = models.CharField(max_length=100, null=True)
     sequence = models.PositiveIntegerField(default=0)
     reminder = models.PositiveIntegerField(default=0)
     reminder_sent = models.BooleanField(default=False)
-    notes = models.CharField(max_length=250, null=True)
+    notes = models.CharField(max_length=250, null=True, blank=True)
     transparent = models.BooleanField(choices=TRANSPARENCY, default=False)
 
     class Meta:
