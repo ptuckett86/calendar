@@ -100,7 +100,7 @@ class CalendarEventSerializer(FlexFieldsModelSerializer):
 
     @transaction.atomic()
     def create(self, validated_data):
-        add_user = validated_data.get("add_user")
+        add_user = validated_data.pop("add_user")
         if add_user:
             check = AuthUser.objects.filter(email=add_user["email"])
             if not check:
